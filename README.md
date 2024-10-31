@@ -8,19 +8,19 @@
 
 # Milestone #1 Description
 
-    Develop a user-creation system validated with email. Handle duplicate credentials. /api/adduser { username, password, email } -- Creates a disabled user that cannot log in. GET /api/verify { email, key } -- Verification link (make sure to include the full link with parameters as part of the plain email text) with the two parameters in the query string is sent by email. Do not use a third-party mail service (e.g., gmail) for your mail server. After verifying (or not verifying) the email, redirect the user to the UI.
+    1. Develop a user-creation system validated with email. Handle duplicate credentials. /api/adduser { username, password, email } -- Creates a disabled user that cannot log in. GET /api/verify { email, key } -- Verification link (make sure to include the full link with parameters as part of the plain email text) with the two parameters in the query string is sent by email. Do not use a third-party mail service (e.g., gmail) for your mail server. After verifying (or not verifying) the email, redirect the user to the UI.
 
-    Add cookie-based session support. Ideally, make sessions persist across server restarts. /api/login { username, password } /api/logout { } /api/check-auth -- Verifies if the user is currently logged in, returns { isLoggedIn: boolean, userId: string }
+    2. Add cookie-based session support. Ideally, make sessions persist across server restarts. /api/login { username, password } /api/logout { } /api/check-auth -- Verifies if the user is currently logged in, returns { isLoggedIn: boolean, userId: string }
 
-    GET "/" Display a list of videos with their corresponding thumbnails
+    3. GET "/" Display a list of videos with their corresponding thumbnails
 
-    POST /api/videos/ {count}: Return list of count video IDs and metadata {title, description}
+    4. POST /api/videos/ {count}: Return list of count video IDs and metadata {title, description}
 
-    GET /api/manifest/:id Send DASH manifest with id :id to the frontend to view the selected video
+    5. GET /api/manifest/:id Send DASH manifest with id :id to the frontend to view the selected video
 
-    GET /api/thumbnail/:id Send thumbnail (the first frame of the video) of video with id :id to the frontend (jpg)
+    6. GET /api/thumbnail/:id Send thumbnail (the first frame of the video) of video with id :id to the frontend (jpg)
 
-    GET /play/:id Return a frontend video player that can play video with id :id
+    7. GET /play/:id Return a frontend video player that can play video with id :id
 
 Similar to warmup project 2, we have
 
