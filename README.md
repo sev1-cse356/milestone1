@@ -6,37 +6,35 @@
 
 -----------
 
-# Milestone #2 Description
+# Milestone #1 Description
 
-1. Include all milestone 1 functionality and include the ones below
+    Develop a user-creation system validated with email. Handle duplicate credentials. /api/adduser { username, password, email } -- Creates a disabled user that cannot log in. GET /api/verify { email, key } -- Verification link (make sure to include the full link with parameters as part of the plain email text) with the two parameters in the query string is sent by email. Do not use a third-party mail service (e.g., gmail) for your mail server. After verifying (or not verifying) the email, redirect the user to the UI.
 
-2. POST /api/like {id, value}
-Allow a logged in user to “like” a post specified by id. value = true if thumbs up, value = false if thumbs down and null if the user did not “like” or “dislike” the video.
-Response format: {likes: number} which is the number of likes on the post. This api should return an error if the new “value” is the same as was already previously set.
+    Add cookie-based session support. Ideally, make sessions persist across server restarts. /api/login { username, password } /api/logout { } /api/check-auth -- Verifies if the user is currently logged in, returns { isLoggedIn: boolean, userId: string }
 
-3. POST /api/videos {count}
-Return information about videos that should be recommended to the user based on their previous like/dislike selections.
-Use a collaborative filtering algorithm to identify videos that are likely to be liked by the logged in user by identifying other users that have similar like/dislike profiles and recommending videos that were liked by the other similar users.  If there are videos that should be recommended that have not been previously watched by the logged in user, they should be recommended.  If there are no videos that can be identified for recommendation based on collaborative filtering that have not yet been viewed by the logged in user, return random videos, first preferring those that have not been watched previously, and only falling back on random videos that have been watched previously.  
-For an example of collaborative filtering, if videos with “id” 1 and 2 were “liked” by user A, and video with “id” 2 was “liked” by user B, then the system should recommend video “id” 1 to user B because users A and B have similar preferences, and user B is likely to enjoy video 1 because the user liked video 2.
-Response format: {videos: [{id: String, description: string, title: string, watched: boolean, likevalue: boolean|null }]}, where videos contain ${count} number of videos.
+    GET "/" Display a list of videos with their corresponding thumbnails
 
-4. POST /api/upload { author, title, video }
-Upload a video to the site with title: title and author: author and video: is the mp4 file.
-Response format: {id: string}
+    POST /api/videos/ {count}: Return list of count video IDs and metadata {title, description}
 
-5. POST /api/view { id }
-Mark video “id” as viewed by the logged in user.  This API call should be made by the UI on videos that were not previously watched whenever that video is first “played” for the user.
+    GET /api/manifest/:id Send DASH manifest with id :id to the frontend to view the selected video
 
-6. GET /upload
-Expects an HTML page where videos can be uploaded from
+    GET /api/thumbnail/:id Send thumbnail (the first frame of the video) of video with id :id to the frontend (jpg)
 
-7. GET /api/processing-status
-Returns a list of uploaded videos for the logged in user.
-Response format: { videos: [{ id: string, title: string, status: string }] }
-where status can be "processing" or "complete", where “processing” indicates the file has been received, but not yet available for viewing.
+    GET /play/:id Return a frontend video player that can play video with id :id
 
-8. All GET and POST responses must contain the header field X-CSE356 with the value containing the ID copied from the course interface.
-If there is any error, you should reply with status code 200 and {"status": "ERROR","error":true,"message":"your error message"}, else respond with status code 200 and the response specified above.
+Similar to warmup project 2, we have
+
+The user should be able to pause div(id="playPauseBtn") and play div(id="playPauseBtn") the video, seek within the video, and dynamically change resolutions.
+
+Resolutions & Bitrates: 320x180 254kbps 320x180 507kbps 480x270 759kbps 640x360 1013kbps 640x360 1254kbps 768x432 1883kbps 1024x576 3134kbps 1280x720 4952kbps
+
+All of the API calls must be to POST routes unless otherwise specified. Include a 'status' property in all JSON responses with the value 'OK' or 'ERROR'. Use your judgement for possible operations/situations that may lead to an error.
+
+All GET and POST responses must contain the header field X-CSE356 with the value containing the ID copied from the course interface. If there is any error, you should reply with status code 200 and {"status": "ERROR","error":true,"message":"your error message"}
+
+Videos and metadata can be downloaded using the command: "wget -r -l1 -A ".mp4" -A ".json" -nd -P videos http://130.245.136.73/mnt2/video/m1.html"
+
+Note: Port 25, the standard SMTP port, is blocked by default. Please execute the following commands on your VMs that need to send email, and our grading instance will act as a relay: ip6tables -I OUTPUT -p tcp -m tcp --dport 25 -j DROP iptables -t nat -I OUTPUT -o ens3 -p tcp -m tcp --dport 25 -j DNAT --to-destination 130.245.136.123:11587 Note that iptables commands are not automatically saved on server restart.
 
 
 -------------------
